@@ -1,0 +1,73 @@
+{% extends 'survey/base.html' %}
+{% block content %}
+<div class="mx-0 mx-sm-auto">
+  <div class="card">
+    <div class="card-header bg-primary">
+      <h5 class="card-title text-white mt-2" id="exampleModalLabel">BreadBerry - BakeryShop</h5>
+    </div>
+    <div class="modal-body">
+      <div class="text-center">
+        <i class="far fa-file-alt fa-4x mb-3 text-primary"></i>
+        <p>
+          <strong>Ответьте на несколько вопросов</strong>
+        </p>
+        <p>
+          Мы придумали для вас опросник.
+          <strong>Интересно, какими будут ваши ответы!</strong>
+        </p>
+      </div>
+
+      <hr />
+
+      <form class="px-4" method="post">
+        {% csrf_token %}  <!-- Добавляем CSRF-токен для безопасности -->
+
+        <!-- Динамически генерируем вопросы и ответы -->
+        {% for field in form %}
+          <div class="question">
+            <p class="text-center"><strong>{{ field.label }}</strong></p>
+
+            {% if field.field.widget.input_type == 'textarea' %}
+              <!-- Текстовое поле для четвёртого вопроса -->
+              <div class="form-outline mb-4">
+                <label for="text_answer_{{ forloop.counter }}">Ваш ответ:</label>
+                <textarea
+                  name="{{ field.html_name }}"
+                  id="text_answer_{{ forloop.counter }}"
+                  class="form-control"
+                  rows="4"
+                ></textarea>
+              </div>
+            {% else %}
+              <!-- Радиокнопки для выбора ответа -->
+              <div class="form-check mb-2">
+                {% for choice in field.field.choices %}
+                  <div class="form-check">
+                    <input
+                      type="radio"
+                      name="{{ field.html_name }}"
+                      id="{{ field.auto_id }}_{{ forloop.counter }}"
+                      value="{{ choice.0 }}"
+                      class="form-check-input"
+                    >
+                    <label class="form-check-label" for="{{ field.auto_id }}_{{ forloop.counter }}">
+                      {{ choice.1 }}  <!-- Отображаем текст варианта ответа -->
+                    </label>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <hr />
+          </div>
+        {% endfor %}
+
+        <!-- Кнопка отправки формы -->
+        <div class="card-footer text-end">
+          <button type="submit" class="btn btn-primary">Отправить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
