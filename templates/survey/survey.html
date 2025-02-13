@@ -1,5 +1,6 @@
 {% extends 'survey/base.html' %}
 {% block content %}
+{% load custom_filters %}
 <div class="mx-0 mx-sm-auto">
   <div class="card">
     <div class="card-header bg-primary">
@@ -20,15 +21,13 @@
       <hr />
 
       <form class="px-4" method="post">
-        {% csrf_token %}  <!-- Добавляем CSRF-токен для безопасности -->
+        {% csrf_token %}
 
-        <!-- Динамически генерируем вопросы и ответы -->
         {% for field in form %}
           <div class="question">
             <p class="text-center"><strong>{{ field.label }}</strong></p>
 
-            {% if field.field.widget.input_type == 'textarea' %}
-              <!-- Текстовое поле для четвёртого вопроса -->
+            {% if field.field|classname == 'CharField' %}
               <div class="form-outline mb-4">
                 <label for="text_answer_{{ forloop.counter }}">Ваш ответ:</label>
                 <textarea
@@ -39,7 +38,6 @@
                 ></textarea>
               </div>
             {% else %}
-              <!-- Радиокнопки для выбора ответа -->
               <div class="form-check mb-2">
                 {% for choice in field.field.choices %}
                   <div class="form-check">
@@ -51,7 +49,7 @@
                       class="form-check-input"
                     >
                     <label class="form-check-label" for="{{ field.auto_id }}_{{ forloop.counter }}">
-                      {{ choice.1 }}  <!-- Отображаем текст варианта ответа -->
+                      {{ choice.1 }}
                     </label>
                   </div>
                 {% endfor %}
@@ -61,8 +59,6 @@
             <hr />
           </div>
         {% endfor %}
-
-        <!-- Кнопка отправки формы -->
         <div class="card-footer text-end">
           <button type="submit" class="btn btn-primary">Отправить</button>
         </div>
