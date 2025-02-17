@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from survey.forms import SurveyForm
-from survey.models import Question, UserResponse, AnswerOption
+from survey.models import Question, UserResponse, AnswerOption, Feedback
 
 
 def survey_view(request):
@@ -24,3 +24,13 @@ def survey_view(request):
 
 def thanks_view(request):
     return render(request, 'survey/thanks.html')
+
+
+def feedback_view(request):
+    if request.method == 'POST':
+        message = request.POST.get('message', '').strip()
+        if message:
+            Feedback.objects.create(message=message)
+            return redirect('thanks')
+    return render(request, 'survey/feedback.html')
+

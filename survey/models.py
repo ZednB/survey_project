@@ -40,3 +40,15 @@ class UserResponse(models.Model):
     class Meta:
         verbose_name = 'Ответ пользователя'
         verbose_name_plural = 'Ответы пользователей'
+
+
+class Feedback(models.Model):
+    message = models.TextField(verbose_name='Отзыв')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+
+    def __str__(self):
+        return f"Отзыв #{self.message}"
+
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'

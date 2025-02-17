@@ -1,0 +1,20 @@
+{% extends 'survey/base.html' %}
+{% block content %}
+<h3 class="bg-primary text-white p-2 mb-2">Оставьте ваш отзыв</h3>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-outline mb-4">
+<!--        <label for="message" class="form-label">Ваш отзыв:</label>-->
+        <textarea
+            name="message"
+            id="message"
+            class="form-control"
+            rows="6"
+            placeholder="Введите ваш отзыв..."
+        ></textarea>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </div>
+</form>
+{% endblock %}
